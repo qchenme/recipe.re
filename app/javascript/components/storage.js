@@ -1,5 +1,5 @@
 import React from "react";
-import Drawer from "@material-ui/core/Drawer";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -20,11 +20,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import Emoji from "./utils/emoji";
 
 class Storage extends React.Component {
-  state = { food: [], opened: [] };
-
-  componentDidMount() {
-    this.getAllFood();
-  }
+  state = { opened: [] };
 
   componentDidUpdate(prevProps) {
     if (prevProps.open != this.props.open) {
@@ -49,7 +45,7 @@ class Storage extends React.Component {
   }
 
   handleStockChange(id) {
-    const { food } = this.state;
+    const { food } = this.props;
     const currentFood = food.find(f => f.id == id);
     if (currentFood) {
       this.updateFood(id, event.target.checked);
@@ -57,38 +53,15 @@ class Storage extends React.Component {
   }
 
   handleDeleteFood(id) {
-    const { food } = this.state;
+    const { food } = this.props;
     const currentFood = food.find(f => f.id == id);
     if (currentFood) {
       this.deleteFood(id);
     }
   }
 
-  getAllFood() {
-    fetch("/graphql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `
-          query {
-            allFood {
-              id
-              name
-              isLowStock
-            }
-          }
-        `
-      })
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(response => {
-        this.setState({ food: response.data.allFood });
-      });
-  }
-
   updateFood(id, isLowStock) {
+    const { getAllFood } = this.props;
     fetch("/graphql", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -113,11 +86,12 @@ class Storage extends React.Component {
         return response.json();
       })
       .then(response => {
-        this.getAllFood();
+        getAllFood();
       });
   }
 
   deleteFood(id) {
+    const { getAllFood } = this.props;
     fetch("/graphql", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -139,16 +113,24 @@ class Storage extends React.Component {
         return response.json();
       })
       .then(response => {
-        this.getAllFood();
+        getAllFood();
       });
   }
 
   render() {
-    const { handleDrawerClose, classes, open } = this.props;
-    const { food, opened } = this.state;
+    const {
+      handleDrawerOpen,
+      handleDrawerClose,
+      classes,
+      open,
+      food
+    } = this.props;
+    const { opened } = this.state;
 
     return (
-      <Drawer
+      <SwipeableDrawer
+        onClose={handleDrawerClose}
+        onOpen={handleDrawerOpen}
         className={classes.drawer}
         variant="persistent"
         anchor="right"
@@ -189,7 +171,7 @@ class Storage extends React.Component {
                 unmountOnExit
               >
                 <List component="div" disablePadding>
-                  <ListItem inset alignItems="center">
+                  <ListItem alignItems="center">
                     <Tooltip
                       title={f.isLowStock ? "Enough Stock" : "Low Stock"}
                     >
@@ -222,7 +204,7 @@ class Storage extends React.Component {
             </div>
           ))}
         </List>
-      </Drawer>
+      </SwipeableDrawer>
     );
   }
 }
