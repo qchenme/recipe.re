@@ -4,6 +4,9 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CookIcon from "@material-ui/icons/LocalDining";
@@ -11,31 +14,59 @@ import { withStyles } from "@material-ui/core/styles";
 import Emoji from "./utils/emoji";
 
 const styles = theme => ({
-  card: {
-    maxWidth: 400
+  cardXlg: {
+    overflow: "auto",
+    height: "70vh"
+  },
+  cardMd: {
+    overflow: "auto",
+    height: "60vh"
+  },
+  cardXs: {
+    overflow: "auto",
+    height: "50vh"
   },
   media: {
     height: 0,
-    paddingTop: "77.25%" // 16:9
+    paddingTop: "55.25%"
   },
   actions: {
     display: "flex"
-  }
+  },
+  content: { overflow: "auto" }
 });
 
 class Recipe extends React.Component {
   render() {
-    const { classes, recipes } = this.props;
+    const { classes, recipes, getGridListCols } = this.props;
+
     return (
-      <Grid container direction="row" justify="center" spacing={16}>
+      <Grid container spacing={24}>
         {Object.keys(recipes).map(key => (
-          <Grid item xs={6} sm={3} key={key}>
-            <Card raised className={classes.card}>
+          <Grid item xs key={key}>
+            <Card
+              className={
+                getGridListCols() == 2
+                  ? classes.cardMd
+                  : getGridListCols() == 1
+                  ? classes.cardXs
+                  : classes.cardXlg
+              }
+            >
               <CardHeader
                 title={recipes[key].label}
-                titleTypographyProps={{ color: "primary", variant: "h6" }}
+                titleTypographyProps={{
+                  color: "primary",
+                  variant: "h6",
+                  noWrap: true
+                }}
                 action={
-                  <IconButton>
+                  <IconButton
+                    onClick={e => {
+                      e.preventDefault;
+                      window.open(recipes[key].url, "_blank");
+                    }}
+                  >
                     <CookIcon color="primary" />
                   </IconButton>
                 }
@@ -45,17 +76,20 @@ class Recipe extends React.Component {
                 image={recipes[key].image}
                 title={`Source: ${recipes[key].source}`}
               />
-              <CardContent>
+              <CardContent className={classes.content}>
                 <Typography variant="subtitle1" color="secondary" gutterBottom>
                   INGREDIENTS
                 </Typography>
-                {recipes[key].ingredientLines.map(text => (
-                  <div key={text}>
-                    <Typography component="p" color="secondary" gutterBottom>
-                      <Emoji symbol="♦️" /> {text}
-                    </Typography>
-                  </div>
-                ))}
+                <Divider light />
+                <List>
+                  {recipes[key].ingredientLines.map(text => (
+                    <ListItem key={text}>
+                      <Typography component="p" color="secondary" noWrap>
+                        <Emoji symbol="🧂" /> {text}
+                      </Typography>
+                    </ListItem>
+                  ))}
+                </List>
               </CardContent>
             </Card>
           </Grid>

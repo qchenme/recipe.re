@@ -9,10 +9,12 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import TextField from "@material-ui/core/TextField";
 import Switch from "@material-ui/core/Switch";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -20,11 +22,11 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import Emoji from "./utils/emoji";
 
 class Storage extends React.Component {
-  state = { opened: [] };
+  state = { opened: [], newFood: "" };
 
   componentDidUpdate(prevProps) {
     if (prevProps.open != this.props.open) {
-      this.setState({ opened: [] });
+      this.setState({ opened: [], newFood: "" });
     }
   }
 
@@ -58,6 +60,36 @@ class Storage extends React.Component {
     if (currentFood) {
       this.deleteFood(id);
     }
+  }
+
+  handleAddFood() {
+    const { newFood } = this.state;
+    const { getAllFood } = this.props;
+    fetch("/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+        mutation{
+          addFood(
+            name:${newFood})
+            {
+            food{
+              id
+              name
+              isLowStock
+            }
+          }
+        }
+        `
+      })
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(response => {
+        getAllFood();
+      });
   }
 
   updateFood(id, isLowStock) {
@@ -125,7 +157,7 @@ class Storage extends React.Component {
       open,
       food
     } = this.props;
-    const { opened } = this.state;
+    const { opened, newFood } = this.state;
 
     return (
       <SwipeableDrawer
@@ -148,12 +180,32 @@ class Storage extends React.Component {
           </Typography>
         </div>
         <Divider />
+
         <List>
+          <ListItem>
+            <TextField
+              id="new-food"
+              label="Add New Food"
+              color="primary"
+              variant="outlined"
+              value={this.state.newFood}
+              placeholder="Type In the Food Name"
+              onChange={e => this.setState({ newFood: e.target.value })}
+              margin="dense"
+            />
+            <IconButton
+              onClick={e => this.handleAddFood()}
+              disabled={newFood == ""}
+            >
+              <AddIcon color="primary" fontSize="large" />
+            </IconButton>
+          </ListItem>
+          <Divider />
           {food.map(f => (
             <div key={f.id}>
               <ListItem button onClick={e => this.handleEditClick(f.id)}>
                 <ListItemText>
-                  <Typography variant="overline" color="secondary">
+                  <Typography variant="overline" color="secondary" gutterBottom>
                     {f.name} {f.isLowStock ? <Emoji symbol="🆘" /> : ""}
                   </Typography>
                 </ListItemText>

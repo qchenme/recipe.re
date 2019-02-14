@@ -8,11 +8,12 @@ const palette = {
   secondary: {
     main: "#ED784A",
     contrastText: "#ffffff"
-  },
-  typography: {
-    useNextVariants: true
   }
+};
+
+const typography = {
+  useNextVariants: true
 };
 const themeName = "Burning Sand Burnt Sienna Icefish";
 
-export default createMuiTheme({ palette, themeName });
+export default createMuiTheme({ palette, typography, themeName });

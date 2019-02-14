@@ -8,6 +8,18 @@ export const param = {
   }
 };
 
+export function randomGenerator(limit, count) {
+  let numList = [];
+  for (let i = 0; i < count; i++) {
+    let random = Math.floor(Math.random() * limit);
+    while (numList.indexOf(random) !== -1) {
+      random = Math.floor(Math.random() * limit);
+    }
+    numList.push(random);
+  }
+  return numList;
+}
+
 export const testRecipes = [
   {
     uri:
@@ -1195,6 +1207,15 @@ export const testRecipes = [
     ],
     cautions: [],
     ingredientLines: [
+      "1 medium sweet potato, or baking potato",
+      "ground black pepper",
+      "salt",
+      "1 medium sweet potato, or baking potato",
+      "ground black pepper",
+      "salt",
+      "1 medium sweet potato, or baking potato",
+      "ground black pepper",
+      "salt",
       "1 medium sweet potato, or baking potato",
       "ground black pepper",
       "salt"

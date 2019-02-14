@@ -7,7 +7,7 @@ import KitchenIcon from "@material-ui/icons/Kitchen";
 
 import Emoji from "./utils/emoji";
 
-const Topbar = ({ classes, handleDrawerOpen }) => (
+const Topbar = ({ classes, handleDrawerOpen, handleRefresh }) => (
   <AppBar position="static">
     <Toolbar className={classes.toolbar}>
       <Typography variant="h5" color="inherit">

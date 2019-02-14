@@ -4,11 +4,14 @@ import Grid from "@material-ui/core/Grid";
 import Recipe from "./recipe";
 import Storage from "./storage";
 import Topbar from "./topbar";
-import { requestURL, param, testRecipes } from "./utils/request";
+import { requestURL, param, randomGenerator } from "./utils/request";
 
 const drawerWidth = 300;
 
 const styles = theme => ({
+  background: {
+    backgroundColor: "grey"
+  },
   header: {
     display: "flex"
   },
@@ -87,11 +90,19 @@ class AppContainer extends React.Component {
   getReipes() {
     const { food } = this.state;
 
+    // If in local storage
+    const cachedHits = sessionStorage.getItem("recipes");
+    if (cachedHits) {
+      this.setState({ recipes: JSON.parse(cachedHits) });
+      return;
+    }
     //Limit to the API => choose random 2 food
     const randomFoodList = [];
-    for (let i = 0; i < 2; i++) {
-      randomFoodList.push(food[Math.floor(Math.random() * food.length)]);
-    }
+    const randomIndexList = randomGenerator(food.length, 2);
+    randomIndexList.forEach(num => {
+      ç.push(food[num]);
+    });
+
     const foodNameList = randomFoodList.map(f => f.name);
     const fetchList = foodNameList.map(f =>
       fetch(`${requestURL}${f}`, param).then(f => f.json())
@@ -102,23 +113,21 @@ class AppContainer extends React.Component {
         let randomRecipeList = [];
         responses.forEach(r => {
           const fullList = r.hits.map(obj => obj.recipe);
-          console.log(fullList);
-          for (let i = 0; i < 5; i++) {
-            randomRecipeList.push(
-              fullList[Math.floor(Math.random() * fullList.length)]
-            );
-          }
+          const randomIndexList = randomGenerator(fullList.length, 8);
+          randomIndexList.forEach(num => {
+            randomRecipeList.push(fullList[num]);
+          });
         });
-        console.log(randomRecipeList);
         return randomRecipeList;
       })
       .then(result => {
         this.setState({ recipes: result });
+        sessionStorage.setItem("recipes", JSON.stringify(result));
       });
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, getGridListCols } = this.props;
     const { open, food, recipes } = this.state;
     return (
       <Grid container spacing={24}>
@@ -134,7 +143,7 @@ class AppContainer extends React.Component {
           />
         </Grid>
         <Grid item xs={12}>
-          <Recipe recipes={recipes} />
+          <Recipe recipes={recipes} getGridListCols={getGridListCols} />
         </Grid>
       </Grid>
     );
