@@ -100,7 +100,7 @@ class AppContainer extends React.Component {
     const randomFoodList = [];
     const randomIndexList = randomGenerator(food.length, 2);
     randomIndexList.forEach(num => {
-      ç.push(food[num]);
+      randomFoodList.push(food[num]);
     });
 
     const foodNameList = randomFoodList.map(f => f.name);
