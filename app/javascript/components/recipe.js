@@ -43,7 +43,7 @@ class Recipe extends React.Component {
     return (
       <Grid container spacing={24}>
         {Object.keys(recipes).map(key => (
-          <Grid item xs key={key}>
+          <Grid item xs={12} md={3} key={key}>
             <Card
               className={
                 getGridListCols() == 2
