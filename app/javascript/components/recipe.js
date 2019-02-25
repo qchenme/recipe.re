@@ -42,8 +42,8 @@ class Recipe extends React.Component {
 
     return (
       <Grid container spacing={24}>
-        {Object.keys(recipes).map(key => (
-          <Grid item xs={12} md={3} key={key}>
+        {Object.keys(recipes).map((key, index) => (
+          <Grid item xs={12} md={3} key={index}>
             <Card
               className={
                 getGridListCols() == 2
@@ -82,8 +82,8 @@ class Recipe extends React.Component {
                 </Typography>
                 <Divider light />
                 <List>
-                  {recipes[key].ingredientLines.map(text => (
-                    <ListItem key={text}>
+                  {recipes[key].ingredientLines.map((text, index) => (
+                    <ListItem key={index}>
                       <Typography component="p" color="secondary" noWrap>
                         <Emoji symbol="🧂" /> {text}
                       </Typography>
