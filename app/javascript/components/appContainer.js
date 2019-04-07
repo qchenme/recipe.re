@@ -82,7 +82,9 @@ class AppContainer extends React.Component {
         return response.json();
       })
       .then(response => {
-        this.setState({ food: response.data.allFood });
+        let result = [];
+        if (response.data.allFood) result = response.data.allFood;
+        this.setState({ food: result });
         this.getReipes();
       });
   }
@@ -96,6 +98,7 @@ class AppContainer extends React.Component {
       this.setState({ recipes: JSON.parse(cachedHits) });
       return;
     }
+    if (!food || food.length === 0) return;
     //Limit to the API => choose random 2 food
     const randomFoodList = [];
     const randomIndexList = randomGenerator(food.length, 2);

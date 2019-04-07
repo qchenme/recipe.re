@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+food = ["banana","squash","potato","lettuce","milk","egg","beef","cheese"];
+8.times do |i|
+  Food.create(name:food[i], is_low_stock: i % 2==0)
+end
+
