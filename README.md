@@ -1,24 +1,43 @@
-# README
+## Installation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Install dependencies
+```sh
+$ bundle install 
+```
+Setup database
+```sh
+$ rails db:create
+$ rails db:migrate
+$ rails db:seed
+```
+Start the server
+```sh
+$ rails server
+```
+Open
+```sh
+$ open http://localhost:3000/
+```
 
-Things you may want to cover:
+## To enable recipes fetching
+Details of fetch function: `requestURL` in `app/javascript/components/utils/request.js`
 
-* Ruby version
+API using: [Edamam API](https://developer.edamam.com/)
 
-* System dependencies
+To use the same API, you must have an account with Edamam API, which gives you APP_ID and API_KEY.
 
-* Configuration
+If you have APP_ID and API_KEY already, in the root directory:
+```
+touch .env
+```
 
-* Database creation
+And copy following code into the `.env` file:
 
-* Database initialization
+```
+API_KEY=YOUR_API_KEY
+APP_ID=YOUR_APP_ID
+```
 
-* How to run the test suite
+Note: Edamam developer version has very limited requests per minute. There are some code to limit the requests volume. But it would still exceed the limit very easily if the page is refreshed frequently.
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
-
-* ...
