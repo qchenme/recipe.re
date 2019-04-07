@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -7,7 +8,7 @@ import KitchenIcon from "@material-ui/icons/Kitchen";
 
 import Emoji from "./utils/emoji";
 
-const Topbar = ({ classes, handleDrawerOpen, handleRefresh }) => (
+const Topbar = ({ classes, handleDrawerOpen }) => (
   <AppBar position="static">
     <Toolbar className={classes.toolbar}>
       <Typography variant="h5" color="inherit">
@@ -19,5 +20,9 @@ const Topbar = ({ classes, handleDrawerOpen, handleRefresh }) => (
     </Toolbar>
   </AppBar>
 );
+
+Topbar.propTypes = {
+  handleDrawerOpen: PropTypes.func
+};
 
 export default Topbar;

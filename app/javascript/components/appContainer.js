@@ -127,7 +127,7 @@ class AppContainer extends React.Component {
   }
 
   render() {
-    const { classes, getGridListCols } = this.props;
+    const { classes } = this.props;
     const { open, food, recipes } = this.state;
     return (
       <Grid container spacing={24}>
@@ -143,7 +143,7 @@ class AppContainer extends React.Component {
           />
         </Grid>
         <Grid item xs={12}>
-          <Recipe recipes={recipes} getGridListCols={getGridListCols} />
+          <Recipe recipes={recipes} />
         </Grid>
       </Grid>
     );

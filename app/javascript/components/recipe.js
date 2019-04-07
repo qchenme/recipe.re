@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -14,18 +15,6 @@ import { withStyles } from "@material-ui/core/styles";
 import Emoji from "./utils/emoji";
 
 const styles = theme => ({
-  cardXlg: {
-    overflow: "auto",
-    height: "70vh"
-  },
-  cardMd: {
-    overflow: "auto",
-    height: "60vh"
-  },
-  cardXs: {
-    overflow: "auto",
-    height: "50vh"
-  },
   media: {
     height: 0,
     paddingTop: "55.25%"
@@ -38,21 +27,13 @@ const styles = theme => ({
 
 class Recipe extends React.Component {
   render() {
-    const { classes, recipes, getGridListCols } = this.props;
+    const { classes, recipes } = this.props;
 
     return (
       <Grid container spacing={24}>
         {Object.keys(recipes).map((key, index) => (
-          <Grid item xs={12} md={3} key={index}>
-            <Card
-              className={
-                getGridListCols() == 2
-                  ? classes.cardMd
-                  : getGridListCols() == 1
-                  ? classes.cardXs
-                  : classes.cardXlg
-              }
-            >
+          <Grid item xs={12} md={6} key={index}>
+            <Card>
               <CardHeader
                 title={recipes[key].label}
                 titleTypographyProps={{
@@ -98,5 +79,9 @@ class Recipe extends React.Component {
     );
   }
 }
+
+Recipe.propTypes = {
+  recipes: PropTypes.array
+};
 
 export default withStyles(styles)(Recipe);

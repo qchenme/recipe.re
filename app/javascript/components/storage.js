@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
@@ -260,5 +261,14 @@ class Storage extends React.Component {
     );
   }
 }
+
+Storage.propTypes = {
+  food: PropTypes.array,
+  handleDrawerOpen: PropTypes.func,
+  handleDrawerClose: PropTypes.func,
+  getAllFood: PropTypes.func,
+  open: PropTypes.bool,
+  classes: PropTypes.object
+};
 
 export default Storage;
